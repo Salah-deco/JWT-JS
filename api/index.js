@@ -3,9 +3,6 @@ const jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json());
 
-// require process
-const process = require('process');
-
 
 // Users DB (in memory)
 const users = [
@@ -21,10 +18,10 @@ const generateRefreshToken = (user) => {
 }
 // method to generate access token
 const generateAccessToken = (user) => {
-    return jwt.sign(user, 'myscretkey', { expiresIn: '30s' });
+    return jwt.sign(user, 'myscretkey', { expiresIn: '5s' });
 }
 
-app.post('/api/refresh', (req, res) => {
+app.post('/api/refresh_token', (req, res) => {
     // take the refresh token from the user
     const refreshToken = req.body.token;
 
@@ -56,8 +53,8 @@ app.post('/api/login', (req, res) => {
         res.json({
             username: user.username,
             isAdmin: user.isAdmin,
-            accessToken: 'Bearer ' + accessToken,
-            refreshToken: 'Bearer ' + refreshToken
+            accessToken: accessToken,
+            refreshToken: refreshToken
         });
     } else {
         res.status(400).json({ message: 'Username or password is incorrect' });
